@@ -16,9 +16,9 @@ import java.util.List;
 public class BalanceService {
 
     private final CardRepository cardRepository;
-    public Card getCard(Integer number) {
-        return Card.toModel(cardRepository.findByNumber(number));
-    }
+//    public Card getCard(Integer number) {
+//        return Card.toModel(cardRepository.findByNumber(number));
+//    }
 
     public Card addMoney(Integer cardNumber, BigDecimal amount) {
         CardEntity card = cardRepository.findByNumber(cardNumber);
