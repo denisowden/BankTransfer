@@ -1,8 +1,9 @@
 package com.denisowden.banktransfer.model;
 
-import com.denisowden.banktransfer.entity.User;
 
 import java.math.BigDecimal;
+
+import com.denisowden.banktransfer.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 

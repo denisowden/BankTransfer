@@ -15,8 +15,8 @@ public class BalanceController {
 
     private final BalanceService balanceService;
 
-    @GetMapping(value = "/{cardNumber}")
-    public CardDto getBalance(@PathVariable Integer cardNumber) {
+    @GetMapping
+    public CardDto getBalance(@RequestBody Integer cardNumber) {
         return balanceService.getCard(cardNumber);
     }
 

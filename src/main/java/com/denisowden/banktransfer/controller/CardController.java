@@ -21,7 +21,7 @@ public class CardController {
 
     @PostMapping
     public CardDto createCard(@RequestBody Card card,
-                           @RequestParam Integer userId){
+                              @RequestParam Integer userId){
 
         return cardService.createCard(card, userId);
     }
