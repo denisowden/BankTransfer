@@ -1,12 +1,10 @@
 package com.denisowden.banktransfer.repository;
 
-import com.denisowden.banktransfer.entity.CardEntity;
+import com.denisowden.banktransfer.entity.Card;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
+public interface CardRepository extends JpaRepository<Card, Integer> {
 
-public interface CardRepository extends JpaRepository<CardEntity, Integer> {
-
-    CardEntity findByNumber(Integer number);
+    Card findByNumber(Integer number);
 
 }

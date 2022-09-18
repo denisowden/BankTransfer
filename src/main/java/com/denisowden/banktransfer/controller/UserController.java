@@ -1,7 +1,7 @@
 package com.denisowden.banktransfer.controller;
 
-import com.denisowden.banktransfer.entity.UserEntity;
-import com.denisowden.banktransfer.model.User;
+import com.denisowden.banktransfer.entity.User;
+import com.denisowden.banktransfer.model.UserDto;
 import com.denisowden.banktransfer.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -12,16 +12,15 @@ import java.util.List;
 @RequestMapping(value = "/users")
 @RequiredArgsConstructor
 public class UserController {
-
     private final UserService userService;
 
     @PostMapping
-    public UserEntity createUser(@RequestBody UserEntity user){
+    public User createUser(@RequestBody User user){
         return userService.createUser(user);
     }
 
     @GetMapping
-    public List<User> getUser(){
+    public List<UserDto> getUser(){
         return userService.getUser();
     }
 
