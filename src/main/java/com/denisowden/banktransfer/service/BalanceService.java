@@ -1,8 +1,9 @@
 package com.denisowden.banktransfer.service;
 
-import com.denisowden.banktransfer.entity.CardEntity;
+import com.denisowden.banktransfer.entity.Card;
 import com.denisowden.banktransfer.exception.NotEnoughMoneyException;
-import com.denisowden.banktransfer.model.Card;
+import com.denisowden.banktransfer.mapper.CardMapper;
+import com.denisowden.banktransfer.model.CardDto;
 import com.denisowden.banktransfer.repository.CardRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,31 +16,32 @@ import java.util.List;
 @AllArgsConstructor
 public class BalanceService {
 
+    private final CardMapper cardMapper;
     private final CardRepository cardRepository;
-    public Card getCard(Integer number) {
-        return Card.toModel(cardRepository.findByNumber(number));
+    public CardDto getCard(Integer number) {
+        return cardMapper.toDto(cardRepository.findByNumber(number));
     }
 
-    public Card addMoney(Integer cardNumber, BigDecimal amount) {
-        CardEntity card = cardRepository.findByNumber(cardNumber);
+    public CardDto addMoney(Integer cardNumber, BigDecimal amount) {
+        Card card = cardRepository.findByNumber(cardNumber);
         card.setAmount(card.getAmount().add(amount));
         cardRepository.save(card);
-        return Card.toModel(card);
+        return cardMapper.toDto(card);
     }
 
-    public List<Card> transferMoney(Integer fromNumberCard, Integer toNumberCard, BigDecimal amount){
+    public List<CardDto> transferMoney(Integer fromNumberCard, Integer toNumberCard, BigDecimal amount){
 
-        CardEntity fromCard = cardRepository.findByNumber(fromNumberCard);
-        CardEntity toCard = cardRepository.findByNumber(toNumberCard);
+        Card fromCard = cardRepository.findByNumber(fromNumberCard);
+        Card toCard = cardRepository.findByNumber(toNumberCard);
         if(fromCard == null || toCard == null) throw new NotEnoughMoneyException("Такой карты не существует");
         if(fromCard.getAmount().compareTo(amount) < 0) throw new NotEnoughMoneyException("Недостаточно денег на вашей карте");
         fromCard.setAmount(fromCard.getAmount().subtract(amount));
         toCard.setAmount(toCard.getAmount().add(amount));
         cardRepository.save(fromCard);
         cardRepository.save(toCard);
-        List<Card> cards = new ArrayList<>();
-        cards.add(Card.toModel(fromCard));
-        cards.add(Card.toModel(toCard));
-        return cards;
+        List<CardDto> cardDtos = new ArrayList<>();
+        cardDtos.add(cardMapper.toDto(fromCard));
+        cardDtos.add(cardMapper.toDto(toCard));
+        return cardDtos;
     }
 }

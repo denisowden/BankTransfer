@@ -1,8 +1,9 @@
 package com.denisowden.banktransfer.service;
 
-import com.denisowden.banktransfer.entity.CardEntity;
-import com.denisowden.banktransfer.entity.UserEntity;
-import com.denisowden.banktransfer.model.Card;
+import com.denisowden.banktransfer.entity.Card;
+import com.denisowden.banktransfer.entity.User;
+import com.denisowden.banktransfer.mapper.CardMapper;
+import com.denisowden.banktransfer.model.CardDto;
 import com.denisowden.banktransfer.repository.CardRepository;
 import com.denisowden.banktransfer.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -15,21 +16,24 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class CardService {
 
+    private final CardMapper cardMapper;
     private final CardRepository cardRepository;
     private final UserRepository userRepository;
 
-    public List<Card> getCard() {
+    public List<CardDto> getCard() {
         return cardRepository.
                 findAll().
                 stream().
-                map(Card::toModel).
+                map(cardMapper::toDto).
                 collect(Collectors.toList());
     }
 
-    public Card createCard(CardEntity cardEntity, Integer userId) {
-        UserEntity userEntity = userRepository.findById(userId).get();
-        cardEntity.setUser(userEntity);
-        return Card.toModel(cardRepository.save(cardEntity));
+    public CardDto createCard(Card card, Integer userId) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
+
+        card.setUser(user);
+        return cardMapper.toDto(cardRepository.save(card));
     }
 
     public Integer deleteCard(Integer id) {

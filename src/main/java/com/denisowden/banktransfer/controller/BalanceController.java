@@ -1,37 +1,36 @@
 package com.denisowden.banktransfer.controller;
 
-import com.denisowden.banktransfer.exception.NotEnoughMoneyException;
-import com.denisowden.banktransfer.model.Card;
+import com.denisowden.banktransfer.model.CardDto;
 import com.denisowden.banktransfer.service.BalanceService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-@RestController(value = "/balance")
+@RestController
+@RequestMapping("/balance")
 @AllArgsConstructor
 public class BalanceController {
 
     private final BalanceService balanceService;
 
-    @GetMapping(value = "/balance/{cardNumber}")
-    public Card getBalance(@PathVariable Integer cardNumber){
+    @GetMapping(value = "/{cardNumber}")
+    public CardDto getBalance(@PathVariable Integer cardNumber) {
         return balanceService.getCard(cardNumber);
     }
 
-    @PostMapping(value = "/balance")
-    public Card addMoney(@RequestParam Integer cardNumber,
-                         @RequestParam BigDecimal amount){
+    @PostMapping
+    public CardDto addMoney(@RequestParam Integer cardNumber,
+                         @RequestParam BigDecimal amount) {
         return balanceService.addMoney(cardNumber, amount);
     }
 
-    @PutMapping(value = "/balance/{fromNumberCard}")
-    public List<Card> transferMoney(@PathVariable Integer fromNumberCard,
+    @PutMapping(value = "/{fromNumberCard}")
+    public List<CardDto> transferMoney(@PathVariable Integer fromNumberCard,
                                     @RequestParam Integer toNumberCard,
-                                    @RequestParam BigDecimal amount){
+                                    @RequestParam BigDecimal amount) {
 
-            return balanceService.transferMoney(fromNumberCard, toNumberCard, amount);
+        return balanceService.transferMoney(fromNumberCard, toNumberCard, amount);
     }
 }

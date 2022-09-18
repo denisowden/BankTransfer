@@ -1,16 +1,18 @@
 package com.denisowden.banktransfer.entity;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import lombok.Setter;
 
-@Entity
-@Data
-@Table(name= "card")
+@Getter
+@Setter
 @NoArgsConstructor
-public class CardEntity {
+@Entity
+@Table(name= "card")
+public class Card {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +23,5 @@ public class CardEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private UserEntity user;
-
+    private User user;
 }
